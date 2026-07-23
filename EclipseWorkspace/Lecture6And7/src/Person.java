@@ -245,7 +245,10 @@ class Person implements IAT {
 
 interface ILoString {
 	//To compute a list of strings appended on another
-	ILoString append(ILoString other);
+	ILoString append(ILoString that);
+	
+  //To compute an appended list via accumulation
+	//ILoString appendHelp(ILoString that);
 }
 
 class ConsLoString implements ILoString {
@@ -256,10 +259,22 @@ class ConsLoString implements ILoString {
 		this.first = first;
 		this.rest = rest;
 	}
+	
 	//To compute a list of strings appended on another
-	public ILoString append(ILoString other) {
-		return new ConsLoString(this.first, this.rest.append(other));
+	public ILoString append(ILoString that) {
+		return new ConsLoString(this.first, this.rest.append(that));
 	}
+	
+	/*
+	public ILoString append(ILoString that) {
+	  return that.appendHelp(this);
+	}
+	
+  //To compute an appended list via accumulation
+	public ILoString appendHelp(ILoString that) {
+	  return this.rest.appendHelp(new ConsLoString(this.first, that));
+	}
+	*/
 }
 
 class MtLoString implements ILoString {
@@ -267,9 +282,16 @@ class MtLoString implements ILoString {
 	}
 	
 	//To compute a list of strings appended on another
-	public ILoString append(ILoString other) {
-		return other;
+	public ILoString append(ILoString that) {
+		return that;
 	}
+	
+	/*
+  //To compute an appended list via accumulation
+	public ILoString appendHelp(ILoString that) {
+    return that;
+  }
+  */
 }
 
 class ExamplesIAT {
