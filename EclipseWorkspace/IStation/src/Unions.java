@@ -1,7 +1,5 @@
-import tester.*;
-
 /**
- * HtDC Lectures
+ * HtDC Lecture
  * Lecture 3: Data Definitions: Unions
  * 
  * Copyright 2013 Viera K. Proulx

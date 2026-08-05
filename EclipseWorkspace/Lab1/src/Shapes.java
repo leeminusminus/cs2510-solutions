@@ -1,5 +1,3 @@
-import tester.*;
-
 // to represent a geometric shape
 interface IShape {
 }
