@@ -1,75 +1,91 @@
 import tester.*;
 /**
  * HtDC Lectures
- * Lecture 5: Methods for unions of classes
+ * Lecture 7: Abstract classes
  * 
  * Copyright 2013 Viera K. Proulx
  * This program is distributed under the terms of the 
  * GNU Lesser General Public License (LGPL)
  * 
- * @since 29 August 2013
+ * @since 14 September 2013
  */
 
-
 /*
- +----------------------------+                    
- | IShape                     |                    
- +----------------------------+                    
- | double area()              |                    
- | double distToOrigin()      |                    
- | IShape grow(int)           |                    
- | boolean biggerThan(IShape) |                    
- | boolean contains(CartPt)   |                    
- +----------------------------+                    
-                    |                                    
-                   / \                                   
-                   ---                                   
-                    |                                    
-             -------------------------------------                  
-             |                                   |                  
-   +----------------------------+   +----------------------------+  
-   | Circle                     |   | Square                     |  
-   +----------------------------+   +----------------------------+  
- +-| CartPt center              | +-| CartPt nw                  |  
- | | int radius                 | | | int size                   |  
- | | String color               | | | String color               |  
- | +----------------------------+ | +----------------------------+  
- | | double area()              | | | double area()              |  
- | | double distToOrigin()      | | | double distToOrigin()      |  
- | | IShape grow(int)           | | | IShape grow(int)           |  
- | | boolean biggerThan(IShape) | | | boolean biggerThan(IShape) |  
- | | boolean contains(CartPt)   | | | boolean contains(CartPt)   |  
- | +----------------------------+ | +----------------------------+  
- +----+ +-------------------------+
-      | |
-      v v                                                                     
- +-----------------------+
- | CartPt                |
- +-----------------------+
- | int x                 |
- | int y                 |
- +-----------------------+
- | double distToOrigin() |
- | double distTo(CartPt) |
- +-----------------------+ 
+                    +----------------------------+                    
+                    | IShape                     |                    
+                    +----------------------------+                    
+                    +----------------------------+                    
+                    | double area()              |                    
+                    | boolean distTo0()          |                    
+                    | IShape grow(int)           |                    
+                    | boolean biggerThan(IShape) |                    
+                    | boolean contains(CartPt)   |                    
+                    +----------------------------+                    
+                                   |                                    
+                                  / \                                   
+                                  ---                                   
+                                   |                                    
+             ---------------------------------------------------------                  
+             |                                   |                   | 
+   +----------------------------+   +----------------------------+   | 
+   | Circle                     |   | Square                     |   | 
+   +----------------------------+   +----------------------------+   | 
+ +-| CartPt center              | +-| CartPt nw                  |   | 
+ | | int radius                 | | | int size                   |   | 
+ | | String color               | | | String color               |   |  
+ | +----------------------------+ | +----------------------------+   | 
+ | | double area()              | | | double area()              |   |  
+ | | boolean distTo0()          | | | boolean distTo0()          |   |  
+ | | IShape grow(int)           | | | IShape grow(int)           |   | 
+ | | boolean biggerThan(IShape) | | | boolean biggerThan(IShape) |   | 
+ | | boolean contains(CartPt)   | | | boolean contains(CartPt)   |   |  
+ | +----------------------------+ | +----------------------------+   |  
+ +---+ +--------------------------+                                  |
+     | |                +--------------------------------------------+
+     | |                |
+     | |   +----------------------------+ 
+     | |   | Rect                       | 
+     | |   +----------------------------+  
+     | | +-| CartPt nw                  | 
+     | | | | int width                  |   
+     | | | | int height                 | 
+     | | | | String color               | 
+     | | | +----------------------------+  
+     | | | | double area()              |  
+     | | | | boolean distTo0()          |  
+     | | | | IShape grow(int)           |   
+     | | | | boolean biggerThan(IShape) |
+     | | | | boolean contains(CartPt)   |  
+     | | | +----------------------------+       
+     | | |
+     v v v                               
+  +-----------------------+
+  | CartPt                |
+  +-----------------------+
+  | int x                 |
+  | int y                 |
+  +-----------------------+
+  | double distTo0()      |
+  | double distTo(CartPt) |
+  +-----------------------+ 
  */
 
 // to represent a geometric shape
 interface IShape {
     // to compute the area of this shape
-    double area();
+    public double area();
     
     // to compute the distance form this shape to the origin
-    double distToOrigin();
+    public double distTo0();
     
     // to increase the size of this shape by the given increment
-    IShape grow(int inc);
+    public IShape grow(int inc);
     
-    // is the area of this shape bigger than the area of the given shape?
-    boolean biggerThan(IShape that);
+    // is the area of this shape is bigger than the area of the given shape?
+    public boolean biggerThan(IShape that);
     
     // does this shape (including the boundary) contain the given point?
-    boolean contains(CartPt pt);
+    public boolean contains(CartPt pt);
 }
 
 // to represent a circle
@@ -84,27 +100,30 @@ class Circle implements IShape {
         this.color = color;
     }
     
-    /*
-     // ** TEMPLATE ** 
-     public returnType methodName() {
-     ... this.center ...              -- CartPt
-     ... this.radius ...              -- int
-     ... this.color ...               -- String
-     
+    /*  TEMPLATE 
+     Fields:
+     ... this.ctr ...             -- CartPt
+     ... this.rad ...             -- int
+     ... this.color ...           -- String
+     Methods:
      ... this.area() ...                  -- double 
-     ... this.distToOrigin() ...          -- double 
-     ... this.grow(int inc) ...           -- IShape
-     ... this.biggerThan(IShape that) ... -- boolean
-     ... this.contains(CartPt pt) ...     -- boolean
+     ... this.distTo0() ...               -- double
+     ... this.grow(int) ...               -- IShape
+     ... this.biggerThan(IShape) ...      -- boolean
+     ... this.contains(CartPt) ...        -- boolean 
+     Methods for fields:
+     ... this.ctr.distTo0() ...           -- double 
+     ... this.ctr.distTo(CartPt) ...      -- double 
      */
+    
     // to compute the area of this shape
     public double area(){
         return Math.PI * this.radius * this.radius;
     }
     
     // to compute the distance form this shape to the origin
-    public double distToOrigin(){
-        return this.center.distToOrigin() - this.radius;
+    public double distTo0(){
+        return this.center.distTo0() - this.radius;
     }
     
     // to increase the size of this shape by the given increment
@@ -112,49 +131,13 @@ class Circle implements IShape {
         return new Circle(this.center, this.radius + inc, this.color);
     }
     
-    // is the area of this shape bigger than the area of the given shape?
+    // is the area of this shape is bigger than the area of the given shape?
     public boolean biggerThan(IShape that){
-        /*---------------------------------------------------
-         // ** TEMPLATE ** 
-         public returnType methodName() {
-         ... this.center ...              -- CartPt
-         ... this.radius ...              -- int
-         ... this.color ...               -- String
-         
-         ... this.area() ...                  -- double 
-         ... this.distToOrigin() ...          -- double 
-         ... this.grow(int inc) ...           -- IShape
-         
-         ... that.center ...              -- CartPt
-         ... that.radius ...              -- int
-         ... that.color ...               -- String
-         
-         ... that.area() ...                  -- double 
-         ... that.distToOrigin() ...          -- double 
-         ... that.grow(int inc) ...           -- IShape
-         ---------------------------------------------------*/
         return this.area() >= that.area();
     }
     
     // does this shape (including the boundary) contain the given point?
     public boolean contains(CartPt pt){
-        /*---------------------------------------------------
-         // ** TEMPLATE ** 
-         public returnType methodName() {
-         ... this.center ...              -- CartPt
-         ... this.radius ...              -- int
-         ... this.color ...               -- String
-         
-         ... this.area() ...                  -- double 
-         ... this.distToOrigin() ...          -- double 
-         ... this.grow(int inc) ...           -- IShape
-         
-         ... this.center.distToOrigin() ...      -- double
-         ... this.center.distTo(CartPt x) ...    -- double
-         
-         ... pt.distToOrigin() ...               -- double
-         ... pt.distTo(CartPt x) ...             -- double
-         ---------------------------------------------------*/
         return this.center.distTo(pt) <= this.radius;
     }
     
@@ -172,17 +155,20 @@ class Square implements IShape {
         this.color = color;
     }
     
-    /*
-     // ** TEMPLATE ** 
-     returnType methodName() {
+    /*  TEMPLATE 
+     Fields:
      ... this.nw ...              -- CartPt
      ... this.size ...            -- int
      ... this.color ...           -- String
-     
+     Methods:
      ... this.area() ...                  -- double 
-     ... this.distToOrigin() ...          -- double 
-     ... this.grow(int inc) ...           -- IShape
-     }
+     ... this.distTo0() ...               -- double
+     ... this.grow(int) ...               -- IShape
+     ... this.biggerThan(IShape) ...      -- boolean
+     ... this.contains(CartPt) ...        -- boolean 
+     Methods for fields:
+     ... this.nw.distTo0() ...            -- double 
+     ... this.nw.distTo(CartPt) ...       -- double 
      */
     
     // to compute the area of this shape
@@ -191,8 +177,8 @@ class Square implements IShape {
     }
     
     // to compute the distance form this shape to the origin
-    public double distToOrigin(){
-        return this.nw.distToOrigin();
+    public double distTo0(){
+        return this.nw.distTo0();
     }
     
     // to increase the size of this shape by the given increment
@@ -200,63 +186,77 @@ class Square implements IShape {
         return new Square(this.nw, this.size + inc, this.color);
     }
     
-    // is the area of this shape bigger than the area of the given shape?
+    // is the area of this shape is bigger than the area of the given shape?
     public boolean biggerThan(IShape that){
-        /*---------------------------------------------------
-         // ** TEMPLATE ** 
-         public returnType methodName() {
-         ... this.nw ...                  -- CartPt
-         ... this.size ...                -- int
-         ... this.color ...               -- String
-         
-         ... this.area() ...                  -- double 
-         ... this.distToOrigin() ...          -- double 
-         ... this.grow(int inc) ...           -- IShape
-         
-         ... that.nw ...                  -- CartPt
-         ... that.size ...                -- int
-         ... that.color ...               -- String
-         
-         ... that.area() ...                  -- double 
-         ... that.distToOrigin() ...          -- double 
-         ... that.grow(int inc) ...           -- IShape
-         ---------------------------------------------------*/
         return this.area() >= that.area();
     }
     
     // does this shape (including the boundary) contain the given point?
     public boolean contains(CartPt pt){
-        /*---------------------------------------------------
-         // ** TEMPLATE ** 
-         public returnType methodName() {
-         ... this.nw ...                  -- CartPt
-         ... this.size ...                -- int
-         ... this.color ...               -- String
-         
-         ... this.area() ...                  -- double 
-         ... this.distToOrigin() ...          -- double 
-         ... this.grow(int inc) ...           -- IShape
-         
-         ... this.nw.distToOrigin() ...       -- double
-         ... this.nw.distTo(CartPt x) ...     -- double
-         
-         ... pt.distToOrigin() ...               -- double
-         ... pt.distTo(CartPt x) ...             -- double
-         ---------------------------------------------------*/
         return (this.nw.x <= pt.x) && (pt.x <= this.nw.x + this.size) &&
         (this.nw.y <= pt.y) && (pt.y <= this.nw.y + this.size);            
     }
 }
 
-/*
- +--------+
- | CartPt |
- +--------+
- | int x  |
- | int y  |
- +--------+
- 
- */
+// to represent a rectangle
+class Rect implements IShape {
+    CartPt nw;
+    int width;
+    int height;
+    String color;
+    
+    Rect(CartPt nw, int width, int height, String color) {
+        this.nw = nw;
+        this.width = width;
+        this.height = height;
+        this.color = color;
+    }
+    
+    /* TEMPLATE
+     FIELDS
+     ... this.nw ...              -- CartPt
+     ... this.width ...           -- int
+     ... this.height ...          -- int
+     ... this.color ...           -- String
+     METHODS
+     ... this.area() ...                  -- double 
+     ... this.distTo0() ...               -- double 
+     ... this.grow(int inc) ...           -- IShape
+     ... this.biggerThan(IShape that) ... -- boolean
+     ... this.contains(CartPt pt) ...     -- boolean
+     METHODS FOR FIELDS:
+     ... this.nw.distTo0() ...        -- double
+     ... this.nw.distTo(CartPt) ...   -- double
+     */
+    
+    // to compute the area of this shape
+    public double area(){
+        return this.width * this.height;
+    }
+    
+    // to compute the distance form this shape to the origin
+    public double distTo0(){
+        return this.nw.distTo0();
+    }
+    
+    // to increase the size of this shape by the given increment
+    public IShape grow(int inc){
+        return new Rect(this.nw, this.width + inc, this.height + inc, 
+                        this.color);
+    }
+    
+    // is the area of this shape is bigger than the area of the given shape?
+    public boolean biggerThan(IShape that){
+        return this.area() >= that.area();
+    }
+    
+    // does this shape (including the boundary) contain the given point?
+    public boolean contains(CartPt pt){
+        return (this.nw.x <= pt.x) && (pt.x <= this.nw.x + this.width) &&
+        (this.nw.y <= pt.y) && (pt.y <= this.nw.y + this.height);            
+    }
+}
+
 
 // to represent a Cartesian point
 class CartPt {
@@ -268,8 +268,17 @@ class CartPt {
         this.y = y;
     }
     
+    /* TEMPLATE
+     FIELDS
+     ... this.x ...          -- int
+     ... this.y ...          -- int
+     METHODS
+     ... this.distTo0() ...        -- double
+     ... this.distTo(CartPt) ...   -- double
+     */
+    
     // to compute the distance form this point to the origin
-    public double distToOrigin(){
+    public double distTo0(){
         return Math.sqrt(this.x * this.x + this.y * this.y);
     }
     
@@ -295,11 +304,15 @@ class ExamplesShapes {
     IShape s2 = new Square(new CartPt(50, 50), 50, "red");
     IShape s3 = new Square(new CartPt(20, 40), 10, "green");
     
-    // test the method distToOrigin in the class CartPt
-    boolean testDistToOrigin(Tester t) { 
+    IShape r1 = new Rect(new CartPt(50, 50), 30, 20, "red");
+    IShape r2 = new Rect(new CartPt(50, 50), 50, 40, "red");
+    IShape r3 = new Rect(new CartPt(20, 40), 10, 20, "green");
+    
+    // test the method distTo0 in the class CartPt
+    boolean testDistTo0(Tester t) { 
         return
-        t.checkInexact(this.pt1.distToOrigin(), 0.0, 0.001) &&
-        t.checkInexact(this.pt2.distToOrigin(), 5.0, 0.001);
+        t.checkInexact(this.pt1.distTo0(), 0.0, 0.001) &&
+        t.checkInexact(this.pt2.distTo0(), 5.0, 0.001);
     }
     
     // test the method distTo in the class CartPt
@@ -315,24 +328,37 @@ class ExamplesShapes {
         t.checkInexact(this.c1.area(), 314.15, 0.01);
     }
     
-    // test the method grow in the class Circle
+    // test the method area in the class Square
     boolean testSquareArea(Tester t) { 
         return
         t.checkInexact(this.s1.area(), 900.0, 0.01);
     }
     
-    // test the method distToOrigin in the class Circle
-    boolean testCircleDistToOrigin(Tester t) { 
+    // test the method area in the class Rect
+    boolean testRectArea(Tester t) { 
         return
-        t.checkInexact(this.c1.distToOrigin(), 60.71, 0.01) &&
-        t.checkInexact(this.c3.distToOrigin(), 74.40, 0.01);
+        t.checkInexact(this.r1.area(), 600.0, 0.01);
     }
     
-    // test the method distTo in the class Circle
-    boolean testSquareDistToOrigin(Tester t) { 
+    // test the method distTo0 in the class Circle
+    boolean testCircleDistTo0(Tester t) { 
         return
-        t.checkInexact(this.s1.distToOrigin(), 70.71, 0.01) &&
-        t.checkInexact(this.s3.distToOrigin(), 44.72, 0.01);
+        t.checkInexact(this.c1.distTo0(), 60.71, 0.01) &&
+        t.checkInexact(this.c3.distTo0(), 74.40, 0.01);
+    }
+    
+    // test the method distTo0 in the class Square
+    boolean testSquareDistTo0(Tester t) { 
+        return
+        t.checkInexact(this.s1.distTo0(), 70.71, 0.01) &&
+        t.checkInexact(this.s3.distTo0(), 44.72, 0.01);
+    }  
+    
+    // test the method distTo0 in the class Rect
+    boolean testRectDistTo0(Tester t) { 
+        return
+        t.checkInexact(this.r1.distTo0(), 70.71, 0.01) &&
+        t.checkInexact(this.r3.distTo0(), 44.72, 0.01);
     }
     
     // test the method grow in the class Circle
@@ -341,10 +367,16 @@ class ExamplesShapes {
         t.checkExpect(this.c1.grow(20), this.c2);
     }
     
-    // test the method grow in the class Circle
+    // test the method grow in the class Square
     boolean testSquareGrow(Tester t) { 
         return
         t.checkExpect(this.s1.grow(20), this.s2);
+    }
+    
+    // test the method grow in the class Rect
+    boolean testRectGrow(Tester t) { 
+        return
+        t.checkExpect(this.r1.grow(20), this.r2);
     }
     
     // test the method biggerThan in the class Circle
@@ -365,6 +397,15 @@ class ExamplesShapes {
         t.checkExpect(this.s3.biggerThan(this.c1), false);
     }
     
+    // test the method biggerThan in the class Rect
+    boolean testRectBiggerThan(Tester t) { 
+        return
+        t.checkExpect(this.r1.biggerThan(this.r2), false) && 
+        t.checkExpect(this.r2.biggerThan(this.r1), true) && 
+        t.checkExpect(this.r1.biggerThan(this.c1), true) && 
+        t.checkExpect(this.r3.biggerThan(this.s1), false);
+    }
+    
     // test the method contains in the class Circle
     boolean testCircleContains(Tester t) { 
         return
@@ -372,11 +413,17 @@ class ExamplesShapes {
         t.checkExpect(this.c2.contains(new CartPt(40, 60)), true);
     }
     
-    
     // test the method contains in the class Square
     boolean testSquareContains(Tester t) { 
         return
         t.checkExpect(this.s1.contains(new CartPt(100, 100)), false) && 
         t.checkExpect(this.s2.contains(new CartPt(55, 60)), true);
+    }
+    
+    // test the method contains in the class Rect
+    boolean testRectContains(Tester t) { 
+        return
+        t.checkExpect(this.r1.contains(new CartPt(100, 100)), false) && 
+        t.checkExpect(this.r2.contains(new CartPt(55, 60)), true);
     }
 }
